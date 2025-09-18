@@ -2,6 +2,7 @@ package com.MoodBox8ap.Backend.controller;
 
 import com.MoodBox8ap.Backend.dto.LoginRequest;
 import com.MoodBox8ap.Backend.dto.LoginResponse;
+import com.MoodBox8ap.Backend.model.Rol;
 import com.MoodBox8ap.Backend.model.Usuario;
 import com.MoodBox8ap.Backend.service.IUsuarioService;
 import com.MoodBox8ap.Backend.security.JwtUtil;
@@ -32,34 +33,49 @@ public class UsuarioController {
     // Crear usuario
     @PostMapping
     public ResponseEntity<Usuario> guardarUsuario(@RequestBody Usuario usuario) {
+        usuario.setRol(Rol.CLIENTE); //  Forzar rol
         Usuario saved = usuarioService.guardarUsuario(usuario);
-        saved.setPassword(null); // Evitamos enviar la contraseña al front
+        saved.setPassword(null); // No devolver la contraseña
         return ResponseEntity.ok(saved);
     }
+
 
     // Login con JWT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        //  Hardcoded Admin
+        if (loginRequest.getCorreo().equals("admin@moodbox.com") &&
+                loginRequest.getPassword().equals("admin123")) {
+
+            String token = jwtUtil.generateToken("admin@moodbox.com", "ADMIN");
+
+            Usuario admin = new Usuario();
+            admin.setCorreo("admin@moodbox.com");
+            admin.setRol(Rol.ADMIN);
+            admin.setNombre("Administrador");
+
+            return ResponseEntity.ok(new LoginResponse(token, admin));
+        }
+
+        // Cliente normal
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getCorreo(),
-                            loginRequest.getPassword()
-                    )
+                    new UsernamePasswordAuthenticationToken(loginRequest.getCorreo(), loginRequest.getPassword())
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String token = jwtUtil.generateToken(userDetails.getUsername());
+            Usuario usuario = usuarioService.buscarPorCorreo(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-            Usuario usuario = usuarioService.buscarPorCorreo(userDetails.getUsername());
-            usuario.setPassword(null);
+            String token = jwtUtil.generateToken(usuario.getCorreo(), usuario.getRol().name());
 
             return ResponseEntity.ok(new LoginResponse(token, usuario));
 
-        } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(401).body("Credenciales incorrectas");
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).body("Credenciales inválidas");
         }
     }
+
 
     // Listar todos los usuarios
     @GetMapping

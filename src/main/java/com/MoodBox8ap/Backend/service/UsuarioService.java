@@ -47,7 +47,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario buscarPorCorreo(String correo) {
+    public Optional<Usuario> buscarPorCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo);
     }
 }

@@ -19,12 +19,12 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        Usuario usuario = usuarioService.buscarPorCorreo(correo);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado: " + correo);
-        }
+        Usuario usuario = usuarioService.buscarPorCorreo(correo)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + correo));
+
         // mapear rol a GrantedAuthority
         String role = usuario.getRol() != null ? usuario.getRol().name().toUpperCase() : "CLIENTE";
+
         return new User(
                 usuario.getCorreo(),
                 usuario.getPassword(),

@@ -37,17 +37,21 @@ public class Usuario {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Rol rol;
 
     private LocalDateTime fechaRegistro;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
+
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference // Para que no genere bucles en la relación con Venta
     private List<Venta> ventas;
 
-    public enum Rol {
-        admin, cliente
-    }
 
     public Long getIdUsuario() {
         return idUsuario;

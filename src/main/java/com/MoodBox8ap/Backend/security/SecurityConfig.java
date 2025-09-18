@@ -30,11 +30,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // ✅ nueva forma de desactivar CSRF
-                .cors(cors -> {})             // ✅ habilitar CORS con configuración por defecto
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+
+                        // Rutas específicas para ADMIN
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Rutas comunes para ADMIN y CLIENTE
+                        .requestMatchers("/api/productos/**").hasAnyRole("ADMIN", "CLIENTE")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
