@@ -10,8 +10,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                //.allowedOrigins("https://pipealf.github.io/MoodBox8AP/")
-                .allowedOrigins("http://127.0.0.1:5500")
+                .allowedOrigins("https://main.drkoft4my5rgd.amplifyapp.com/")
+                //.allowedOrigins("http://127.0.0.1:5500")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
