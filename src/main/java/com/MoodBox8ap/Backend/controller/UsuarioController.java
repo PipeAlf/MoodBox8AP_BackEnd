@@ -40,6 +40,7 @@ public class UsuarioController {
     // Login con JWT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        System.out.println("🔐 Intentando login para: " + loginRequest.getCorreo());
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -54,10 +55,16 @@ public class UsuarioController {
             Usuario usuario = usuarioService.buscarPorCorreo(userDetails.getUsername());
             usuario.setPassword(null);
 
+            System.out.println("✅ Login exitoso para: " + usuario.getCorreo());
             return ResponseEntity.ok(new LoginResponse(token, usuario));
 
         } catch (BadCredentialsException ex) {
+            System.out.println("❌ Credenciales incorrectas para: " + loginRequest.getCorreo());
             return ResponseEntity.status(401).body("Credenciales incorrectas");
+        } catch (Exception ex) {
+            System.out.println("❌ Error en login: " + ex.getMessage());
+            ex.printStackTrace();
+            return ResponseEntity.status(500).body("Error interno del servidor");
         }
     }
 
