@@ -29,11 +29,25 @@ public class Producto {
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
-
     private LocalDateTime fechaCreacion;
 
     public enum Estado {
         activo, inactivo
+    }
+
+    private String codigo;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagen; // puede almacenar base64 o URL
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaCreacion == null) {
+            this.fechaCreacion = LocalDateTime.now();
+        }
+        if (this.estado == null) {
+            this.estado = Estado.activo;
+        }
     }
 
     public Long getIdProducto() {
@@ -98,5 +112,21 @@ public class Producto {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 }
