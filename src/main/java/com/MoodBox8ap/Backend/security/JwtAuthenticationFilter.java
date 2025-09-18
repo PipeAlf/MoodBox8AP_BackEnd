@@ -26,22 +26,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        // Ignorar el login: no aplicar validación de token
+        String path = request.getRequestURI();
+
+        if (path.equals("/api/usuarios/login") ||
+                (request.getMethod().equals("POST") && path.equals("/api/usuarios"))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
             if (jwtUtil.validateToken(token)) {
                 String username = jwtUtil.getUsernameFromToken(token);
+                String role = jwtUtil.getRoleFromToken(token);
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    String role = jwtUtil.getRoleFromToken(token);
-
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
-
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
