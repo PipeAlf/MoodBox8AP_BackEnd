@@ -31,6 +31,13 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping
+    public ResponseEntity<List<Producto>> obtenerProductosActivos() {
+        List<Producto> productos = productoService.listarProductosActivos(); // que solo traiga los .getActivo() == true
+        return ResponseEntity.ok(productos);
+    }
+
+
     @PostMapping
     public Producto guardarProducto(@RequestBody Producto producto) {
         return productoService.guardarProducto(producto);

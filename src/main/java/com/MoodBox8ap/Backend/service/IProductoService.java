@@ -9,4 +9,5 @@ public interface IProductoService {
     Optional<Producto> obtenerPorId(Long id);
     Producto guardarProducto(Producto producto);
     void eliminarProducto(Long id);
+    List<Producto> listarProductosActivos();
 }

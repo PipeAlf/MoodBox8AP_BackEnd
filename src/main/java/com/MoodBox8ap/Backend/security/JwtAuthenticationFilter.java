@@ -32,6 +32,7 @@ import java.util.List;
 
         if (path.equals("/api/usuarios/login") ||
                 (request.getMethod().equals("POST") && path.equals("/api/usuarios"))) {
+            System.out.println("🟢 Permitir sin token: " + path);
             filterChain.doFilter(request, response);
             return;
         }

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -38,10 +39,16 @@ public class UsuarioController {
 
     // Crear usuario
     @PostMapping
-    public ResponseEntity<Usuario> guardarUsuario(@RequestBody Usuario usuario) {
-        usuario.setRol(Rol.CLIENTE); //  Forzar rol
+    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) {
+        Optional<Usuario> existente = usuarioService.buscarPorCorreo(usuario.getCorreo());
+
+        if (existente.isPresent()) {
+            return ResponseEntity.status(409).body("El correo ya está registrado.");
+        }
+
+        usuario.setRol(Rol.CLIENTE); // Forzar rol
         Usuario saved = usuarioService.guardarUsuario(usuario);
-        saved.setPassword(null); // No devolver la contraseña
+        saved.setPassword(null); // No devolver contraseña
         return ResponseEntity.ok(saved);
     }
 
