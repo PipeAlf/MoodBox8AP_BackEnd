@@ -38,4 +38,9 @@ public class ProductoService implements IProductoService {
     public void eliminarProducto(Long id) {
         productoRepository.deleteById(id);
     }
+
+    @Override
+    public List<Producto> listarProductosActivos() {
+        return List.of();
+    }
 }
