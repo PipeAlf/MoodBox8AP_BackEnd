@@ -92,27 +92,26 @@ public class UsuarioController {
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
         return usuarioService.obtenerPorId(id)
                 .map(usuarioExistente -> {
-
                     usuarioExistente.setNombre(usuarioActualizado.getNombre());
                     usuarioExistente.setApellido(usuarioActualizado.getApellido());
                     usuarioExistente.setCorreo(usuarioActualizado.getCorreo());
                     usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
 
-                    //  Solo actualizar la contraseña si se proporciona una nueva
+                    // 👇 SOLO actualiza si hay una nueva password no vacía
                     if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isBlank()) {
-                        usuarioExistente.setPassword(passwordEncoder.encode(usuarioActualizado.getPassword()));
+                        usuarioExistente.setPassword(usuarioActualizado.getPassword());
                     }
 
-                    //  Actualizar la foto si se envía una nueva
+                    // 👇 SOLO actualiza si hay una nueva foto no vacía
                     if (usuarioActualizado.getFoto() != null && !usuarioActualizado.getFoto().isBlank()) {
                         usuarioExistente.setFoto(usuarioActualizado.getFoto());
                     }
 
-                    // Mantener rol y fechaRegistro
                     return ResponseEntity.ok(usuarioService.guardarUsuario(usuarioExistente));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
 
     // Eliminar usuario
