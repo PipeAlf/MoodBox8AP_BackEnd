@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -48,10 +48,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
                     SecurityContextHolder.getContext().setAuthentication(auth);
+                    System.out.println("🔐 Usuario autenticado desde JWT: " + username);
+                    System.out.println("🔐 Rol del token: " + role);
+                    System.out.println("🔐 Authorities: " + auth.getAuthorities());
                 }
             }
         }
 
         filterChain.doFilter(request, response);
+
     }
+
 }

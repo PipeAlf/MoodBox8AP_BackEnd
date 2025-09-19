@@ -46,6 +46,8 @@ public class Usuario {
     protected void onCreate() {
         this.fechaRegistro = LocalDateTime.now();
     }
+    @Column(columnDefinition = "TEXT")
+    private String foto;
 
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -123,5 +125,13 @@ public class Usuario {
 
     public void setVentas(List<Venta> ventas) {
         this.ventas = ventas;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }

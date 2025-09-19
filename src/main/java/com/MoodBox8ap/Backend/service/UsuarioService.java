@@ -1,6 +1,5 @@
 package com.MoodBox8ap.Backend.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.MoodBox8ap.Backend.model.Usuario;
 import com.MoodBox8ap.Backend.repository.IUsuarioRepository;
@@ -14,12 +13,14 @@ import java.util.Optional;
 public class UsuarioService implements IUsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    public UsuarioService(IUsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Autowired
-    public UsuarioService(IUsuarioRepository usuarioRepository,
-                          @Lazy PasswordEncoder passwordEncoder) { // 👈 con @Lazy rompemos el ciclo
-        this.usuarioRepository = usuarioRepository;
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -35,7 +36,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario guardarUsuario(Usuario usuario) {
-        if (usuario.getPassword() != null) {
+        if (usuario.getPassword() != null && !usuario.getPassword().startsWith("$2a$")) {
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         }
         return usuarioRepository.save(usuario);
