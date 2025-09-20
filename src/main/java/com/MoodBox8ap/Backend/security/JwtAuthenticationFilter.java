@@ -52,6 +52,9 @@ import java.util.List;
                     System.out.println("🔐 Usuario autenticado desde JWT: " + username);
                     System.out.println("🔐 Rol del token: " + role);
                     System.out.println("🔐 Authorities: " + auth.getAuthorities());
+                    System.out.println("🧪 Context auth: " + SecurityContextHolder.getContext().getAuthentication());
+                    System.out.println("🧪 Roles: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+
                 }
             }
         }

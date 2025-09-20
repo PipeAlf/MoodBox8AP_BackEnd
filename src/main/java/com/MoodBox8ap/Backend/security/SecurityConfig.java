@@ -49,11 +49,30 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/productos/**").hasAnyRole("ADMIN", "CLIENTE")
+
+                        // ✅ Solo clientes pueden comprar
+                        .requestMatchers(HttpMethod.POST, "/api/ventas").hasRole("CLIENTE")
+
+                        // GET públicos para catálogo
+                        .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/productos/activos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/productos/{id}").permitAll()
+
+                        // ADMIN puede gestionar productos
+                        .requestMatchers(HttpMethod.POST, "/api/productos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/productos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
+
+                        // CLIENTE puede acceder a su carrito
+                        .requestMatchers("/api/carrito/**").hasAnyRole("CLIENTE", "ADMIN")
+
+                        // Cliente o admin puede editar perfil
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasAnyRole("CLIENTE", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
+
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationManager(authenticationManager());
 
@@ -61,5 +80,6 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
 

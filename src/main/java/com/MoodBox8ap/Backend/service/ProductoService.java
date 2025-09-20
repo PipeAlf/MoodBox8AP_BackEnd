@@ -2,7 +2,6 @@ package com.MoodBox8ap.Backend.service;
 
 import com.MoodBox8ap.Backend.model.Producto;
 import com.MoodBox8ap.Backend.repository.IProductoRepository;
-import com.MoodBox8ap.Backend.service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +40,7 @@ public class ProductoService implements IProductoService {
 
     @Override
     public List<Producto> listarProductosActivos() {
-        return List.of();
+        return productoRepository.findByEstado(Producto.Estado.activo);
     }
+
 }

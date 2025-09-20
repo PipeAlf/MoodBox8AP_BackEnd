@@ -5,6 +5,8 @@ import com.MoodBox8ap.Backend.service.IProductoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +33,35 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public ResponseEntity<List<Producto>> obtenerProductosActivos() {
-        List<Producto> productos = productoService.listarProductosActivos(); // que solo traiga los .getActivo() == true
-        return ResponseEntity.ok(productos);
+    @GetMapping("/activos")
+    public ResponseEntity<List<Map<String, Object>>> obtenerProductosActivos() {
+        List<Producto> productos = productoService.listarProductosActivos();
+
+        // Convertimos cada producto a un Map con "categorias" como array
+        List<Map<String, Object>> productosConCategorias = productos.stream().map(producto -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", producto.getIdProducto());
+            map.put("nombre", producto.getNombre());
+            map.put("descripcion", producto.getDescripcion());
+            map.put("precio", producto.getPrecio());
+            map.put("stock", producto.getStock());
+            map.put("codigo", producto.getCodigo());
+            map.put("imagen", producto.getImagen());
+            map.put("estado", producto.getEstado());
+
+            // 👇 convertir la cadena "categoria" en array
+            List<String> categorias = Arrays.stream(producto.getCategoria().split(","))
+                    .map(String::trim)
+                    .filter(c -> !c.isBlank())
+                    .toList();
+            map.put("categorias", categorias);
+
+            return map;
+        }).toList();
+
+        return ResponseEntity.ok(productosConCategorias);
     }
+
 
 
     @PostMapping
