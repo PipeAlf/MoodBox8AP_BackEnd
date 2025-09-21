@@ -41,15 +41,34 @@ public class CarritoItemService implements ICarritoItemService {
         CarritoItem existente = carritoItemRepository
                 .findByUsuario_IdUsuarioAndProducto_IdProducto(usuarioId, productoId);
 
-        // ⚠️ YA NO SUMES, SOLO USA la cantidad que te manda el frontend
-        if (cantidad > producto.getStock()) {
-            throw new IllegalArgumentException("Stock insuficiente");
-        }
-
         if (existente != null) {
-            existente.setCantidad(cantidad);  // ← reemplaza, no sumes
+            /**
+             * 🎯 Lógica clave:
+             * - Si la cantidad recibida es 1 → viene del catálogo → SUMAR
+             * - Si la cantidad recibida es > 1 → viene del carrito → REEMPLAZAR
+             */
+            if (cantidad == 1) {
+                int nuevaCantidad = existente.getCantidad() + 1;
+
+                if (nuevaCantidad > producto.getStock()) {
+                    throw new IllegalArgumentException("Stock insuficiente");
+                }
+
+                existente.setCantidad(nuevaCantidad);
+            } else {
+                // Acción desde el carrito → reemplazar
+                if (cantidad > producto.getStock()) {
+                    throw new IllegalArgumentException("Stock insuficiente");
+                }
+                existente.setCantidad(cantidad);
+            }
+
             return carritoItemRepository.save(existente);
         } else {
+            if (cantidad > producto.getStock()) {
+                throw new IllegalArgumentException("Stock insuficiente");
+            }
+
             CarritoItem nuevo = new CarritoItem();
             nuevo.setUsuario(usuario);
             nuevo.setProducto(producto);
@@ -57,6 +76,7 @@ public class CarritoItemService implements ICarritoItemService {
             return carritoItemRepository.save(nuevo);
         }
     }
+
 
 
     @Override
