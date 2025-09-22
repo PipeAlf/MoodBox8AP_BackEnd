@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/detalles")
+@CrossOrigin(origins = "https://main.drkoft4my5rgd.amplifyapp.com")
 public class DetalleVentaController {
 
     private final IDetalleVentaService detalleVentaService;

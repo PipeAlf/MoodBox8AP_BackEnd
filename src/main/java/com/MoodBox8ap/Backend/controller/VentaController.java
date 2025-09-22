@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ventas")
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"})
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500", "https://main.drkoft4my5rgd.amplifyapp.com"})
 public class VentaController {
 
     private final IVentaService ventaService;

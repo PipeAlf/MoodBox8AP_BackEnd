@@ -20,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "https://main.drkoft4my5rgd.amplifyapp.com")
 public class UsuarioController {
 
     private final IUsuarioService usuarioService;
