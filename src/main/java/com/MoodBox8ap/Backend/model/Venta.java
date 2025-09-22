@@ -1,6 +1,7 @@
 package com.MoodBox8ap.Backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,6 @@ public class Venta {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference // Evita ciclo infinito con Usuario
     private Usuario usuario;
 
     private LocalDateTime fechaVenta;

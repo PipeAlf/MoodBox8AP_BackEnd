@@ -4,6 +4,7 @@ import com.MoodBox8ap.Backend.dto.LoginRequest;
 import com.MoodBox8ap.Backend.dto.LoginResponse;
 import com.MoodBox8ap.Backend.model.Rol;
 import com.MoodBox8ap.Backend.model.Usuario;
+import com.MoodBox8ap.Backend.model.Venta;
 import com.MoodBox8ap.Backend.service.IUsuarioService;
 import com.MoodBox8ap.Backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class UsuarioController {
         }
 
         usuario.setRol(Rol.CLIENTE); // Forzar rol
+        usuario.setEstado("activo"); // Forzar estado
         Usuario saved = usuarioService.guardarUsuario(usuario);
         saved.setPassword(null); // No devolver contraseña
         return ResponseEntity.ok(saved);

@@ -68,6 +68,7 @@ public class VentaService implements IVentaService {
             total += detalle.getSubtotal();
         }
 
+
         venta.setTotal(total);
 
         // Guardar la venta (con cascade guarda los detalles)
@@ -78,4 +79,15 @@ public class VentaService implements IVentaService {
 
         return guardada;
     }
+    @Override
+    public List<Venta> obtenerTodasLasVentas() {
+        return ventaRepository.findAll();
+    }
+
+    @Override
+    public Venta obtenerVentaPorId(Long id) {
+        return ventaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada con id: " + id));
+    }
+
 }

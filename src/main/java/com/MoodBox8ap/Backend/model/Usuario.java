@@ -1,5 +1,7 @@
 package com.MoodBox8ap.Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "usuario")
+@JsonIgnoreProperties({"ventas"})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,7 @@ public class Usuario {
     private String correo;
 
     private String telefono;
+    private String estado;
 
     @Column(nullable = false)
     private String password;
@@ -51,7 +55,7 @@ public class Usuario {
 
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Para que no genere bucles en la relación con Venta
+    @JsonIgnore
     private List<Venta> ventas;
 
 
@@ -111,6 +115,14 @@ public class Usuario {
         this.rol = rol;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
@@ -134,4 +146,5 @@ public class Usuario {
     public void setFoto(String foto) {
         this.foto = foto;
     }
+
 }

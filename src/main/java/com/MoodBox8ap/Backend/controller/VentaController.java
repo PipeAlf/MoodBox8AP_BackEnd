@@ -4,7 +4,10 @@ import com.MoodBox8ap.Backend.dto.VentaRequest;
 import com.MoodBox8ap.Backend.model.Venta;
 import com.MoodBox8ap.Backend.service.IVentaService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ventas")
@@ -22,4 +25,19 @@ public class VentaController {
         Venta venta = ventaService.realizarVenta(request.getUsuarioId(), request.getMetodoPago());
         return ResponseEntity.ok(venta);
     }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Venta> obtenerTodasLasVentas() {
+        return ventaService.obtenerTodasLasVentas();
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Venta> obtenerVentaPorId(@PathVariable Long id) {
+        Venta venta = ventaService.obtenerVentaPorId(id);
+        return ResponseEntity.ok(venta);
+    }
+
+
 }

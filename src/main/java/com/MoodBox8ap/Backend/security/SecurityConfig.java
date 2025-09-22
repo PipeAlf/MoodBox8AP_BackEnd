@@ -50,8 +50,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
 
-                        // ✅ Solo clientes pueden comprar
+                        // ventas
                         .requestMatchers(HttpMethod.POST, "/api/ventas").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/ventas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/ventas/**").hasRole("ADMIN")
+
+
 
                         // GET públicos para catálogo
                         .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
