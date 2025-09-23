@@ -69,9 +69,9 @@ public class UsuarioController {
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             String token = jwtUtil.generateToken(usuario.getCorreo(), usuario.getRol().name());
-            System.out.println("🔐 Password DB: " + usuario.getPassword());
-            System.out.println("🔐 Password Login: " + loginRequest.getPassword());
-            System.out.println("🔐 Matches: " + passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword()));
+            System.out.println("Password DB: " + usuario.getPassword());
+            System.out.println("Password Login: " + loginRequest.getPassword());
+            System.out.println("Matches: " + passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword()));
 
             return ResponseEntity.ok(new LoginResponse(token, usuario));
 
@@ -106,12 +106,12 @@ public class UsuarioController {
                     usuarioExistente.setCorreo(usuarioActualizado.getCorreo());
                     usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
 
-                    // 👇 SOLO actualiza si hay una nueva password no vacía
+                    //  SOLO actualiza si hay una nueva password no vacía
                     if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isBlank()) {
                         usuarioExistente.setPassword(usuarioActualizado.getPassword());
                     }
 
-                    // 👇 SOLO actualiza si hay una nueva foto no vacía
+                    //  SOLO actualiza si hay una nueva foto no vacía
                     if (usuarioActualizado.getFoto() != null && !usuarioActualizado.getFoto().isBlank()) {
                         usuarioExistente.setFoto(usuarioActualizado.getFoto());
                     }

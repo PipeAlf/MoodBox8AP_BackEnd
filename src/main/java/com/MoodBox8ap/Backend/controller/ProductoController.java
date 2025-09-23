@@ -49,7 +49,7 @@ public class ProductoController {
             map.put("imagen", producto.getImagen());
             map.put("estado", producto.getEstado());
 
-            // 👇 convertir la cadena "categoria" en array
+            // convertir la cadena "categoria" en array
             List<String> categorias = Arrays.stream(producto.getCategoria().split(","))
                     .map(String::trim)
                     .filter(c -> !c.isBlank())
@@ -97,7 +97,7 @@ public class ProductoController {
             @PathVariable Long id,
             @RequestBody Map<String, String> body) {
 
-        System.out.println("📥 Body recibido: " + body);
+        System.out.println(" Body recibido: " + body);
 
         String nuevoEstado = body.get("estado");
         if (nuevoEstado == null ||

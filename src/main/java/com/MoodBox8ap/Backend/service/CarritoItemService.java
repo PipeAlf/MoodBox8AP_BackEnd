@@ -43,7 +43,7 @@ public class CarritoItemService implements ICarritoItemService {
 
         if (existente != null) {
             /**
-             * 🎯 Lógica clave:
+             *  Lógica clave:
              * - Si la cantidad recibida es 1 → viene del catálogo → SUMAR
              * - Si la cantidad recibida es > 1 → viene del carrito → REEMPLAZAR
              */

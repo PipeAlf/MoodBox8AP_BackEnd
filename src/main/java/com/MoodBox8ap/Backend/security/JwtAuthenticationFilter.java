@@ -32,7 +32,7 @@ import java.util.List;
 
         if (path.equals("/api/usuarios/login") ||
                 (request.getMethod().equals("POST") && path.equals("/api/usuarios"))) {
-            System.out.println("🟢 Permitir sin token: " + path);
+            System.out.println(" Permitir sin token: " + path);
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,11 +49,11 @@ import java.util.List;
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                    System.out.println("🔐 Usuario autenticado desde JWT: " + username);
-                    System.out.println("🔐 Rol del token: " + role);
-                    System.out.println("🔐 Authorities: " + auth.getAuthorities());
-                    System.out.println("🧪 Context auth: " + SecurityContextHolder.getContext().getAuthentication());
-                    System.out.println("🧪 Roles: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                    System.out.println(" Usuario autenticado desde JWT: " + username);
+                    System.out.println(" Rol del token: " + role);
+                    System.out.println(" Authorities: " + auth.getAuthorities());
+                    System.out.println(" Context auth: " + SecurityContextHolder.getContext().getAuthentication());
+                    System.out.println(" Roles: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 
                 }
             }
