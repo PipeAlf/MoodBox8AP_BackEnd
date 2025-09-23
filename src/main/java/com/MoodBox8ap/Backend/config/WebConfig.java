@@ -1,4 +1,4 @@
-package com.MoodBox8ap.Backend;
+package com.MoodBox8ap.Backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

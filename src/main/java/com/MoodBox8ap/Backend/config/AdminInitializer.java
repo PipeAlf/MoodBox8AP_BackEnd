@@ -33,8 +33,8 @@ public class AdminInitializer {
             admin.setTelefono("000000000");
             admin.setPassword(passwordEncoder.encode("admin123"));
             usuarioRepository.save(admin);
-            System.out.println("🛡️ Admin creado correctamente en la base de datos.");
+            System.out.println(" Admin creado correctamente en la base de datos.");
         }
-        System.out.println("🛡️ Admin ya existe. No se creó uno nuevo.");
+        System.out.println(" Admin ya existe. No se creó uno nuevo.");
     }
 }
